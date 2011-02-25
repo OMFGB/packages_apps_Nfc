@@ -19,14 +19,6 @@ package com.android.nfc;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.content.Context;
-import android.content.Intent;
-import android.nfc.NdefTag;
-import android.nfc.NfcAdapter;
-import android.nfc.NdefMessage;
-import android.nfc.Tag;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 
 /**
  * Native interface to the NFC Manager functions
@@ -88,8 +80,6 @@ public class NativeNfcManager {
 
     public native void doSetProperties(int param, int value);
 
-    public native void doCancel();
-
     public native NativeLlcpConnectionlessSocket doCreateLlcpConnectionlessSocket(int nSap);
 
     public native NativeLlcpServiceSocket doCreateLlcpServiceSocket(int nSap, String sn, int miu,
@@ -102,6 +92,16 @@ public class NativeNfcManager {
 
     public native boolean doActivateLlcp();
 
+
+    public native void doResetIsoDepTimeout();
+    public void resetIsoDepTimeout() {
+        doResetIsoDepTimeout();
+    }
+
+    public native void doSetIsoDepTimeout(int timeout);
+    public void setIsoDepTimeout(int timeout) {
+        doSetIsoDepTimeout(timeout);
+    }
 
     /**
      * Notifies Ndef Message (TODO: rename into notifyTargetDiscovered)
@@ -138,4 +138,11 @@ public class NativeNfcManager {
         mNfcService.sendMessage(NfcService.MSG_LLCP_LINK_DEACTIVATED, device);
     }
 
+    private void notifySeFieldActivated() {
+        mNfcService.sendMessage(NfcService.MSG_SE_FIELD_ACTIVATED, null);
+    }
+
+    private void notifySeFieldDeactivated() {
+        mNfcService.sendMessage(NfcService.MSG_SE_FIELD_DEACTIVATED, null);
+    }
 }
