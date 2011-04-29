@@ -78,6 +78,7 @@ extern "C" {
 #define NDEF_TYPE3_TAG                   3
 #define NDEF_TYPE4_TAG                   4
 #define NDEF_MIFARE_CLASSIC_TAG          101
+#define NDEF_ICODE_SLI_TAG               102
 
 /* Pre-defined tag type values. These must match the values in
  * Ndef.java in the framework.
@@ -179,9 +180,6 @@ typedef struct nfc_jni_callback_data
    /* Used to provide a local context to the callback */
    void* pContext;
 
-   /* Used to create java attributes in callback */
-   JNIEnv* e;
-
 } nfc_jni_callback_data_t;
 
 typedef struct nfc_jni_listen_data
@@ -205,6 +203,9 @@ typedef struct nfc_jni_listen_data
 
 namespace android {
 
+extern JavaVM *vm;
+
+JNIEnv *nfc_get_env();
 
 bool nfc_cb_data_init(nfc_jni_callback_data* pCallbackData, void* pContext);
 void nfc_cb_data_deinit(nfc_jni_callback_data* pCallbackData);
